@@ -4,6 +4,8 @@ import com.wiley.firewatch.api.enities.FirewatchAPIContext;
 import com.wiley.firewatch.api.enities.ObserverMetadata;
 import com.wiley.firewatch.api.enums.RelationshipType;
 import com.wiley.firewatch.observers.IObserver;
+import com.wiley.firewatch.strategies.IAssertStrategy;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Accessors(fluent = true)
 public abstract class FirewatchBlueprint<T, S extends FirewatchBlueprint> {
+    @Getter(AccessLevel.PROTECTED)
     private FirewatchAPIContext context = new FirewatchAPIContext();
     @Getter
     private List<ObserverMetadata<T>> observers = new ArrayList<>();
@@ -75,6 +78,11 @@ public abstract class FirewatchBlueprint<T, S extends FirewatchBlueprint> {
     @SuppressWarnings("unchecked")
     S self() {
         return (S) this;
+    }
+
+    public S strategy(IAssertStrategy strategy) {
+        context.strategy(strategy);
+        return self();
     }
 
     @Override

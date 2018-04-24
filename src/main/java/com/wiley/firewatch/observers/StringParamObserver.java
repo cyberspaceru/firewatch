@@ -1,5 +1,7 @@
 package com.wiley.firewatch.observers;
 
+import java.util.regex.Pattern;
+
 /**
  * Created by itatsiy on 4/20/2018.
  */
@@ -18,7 +20,7 @@ public abstract class StringParamObserver<T> implements IObserver<T> {
         } else {
             switch (type) {
                 case REGEXP:
-                    return actual.matches(expected);
+                    return Pattern.compile(expected).matcher(actual).find();
                 case EQUALS:
                     return actual.equals(expected);
                 case EQUALS_IGNORE_CASE:

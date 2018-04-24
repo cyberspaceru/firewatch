@@ -1,5 +1,6 @@
 package com.wiley.firewatch.api.enities;
 
+import com.wiley.firewatch.strategies.IAssertStrategy;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -10,12 +11,13 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 public class FirewatchAPIContext {
     private boolean inverted;
+    private IAssertStrategy strategy;
 
     public boolean inverted() {
         if (inverted) {
             inverted(false);
             return true;
         }
-        return inverted;
+        return false;
     }
 }

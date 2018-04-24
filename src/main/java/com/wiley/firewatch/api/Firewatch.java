@@ -10,6 +10,7 @@ import com.wiley.firewatch.strategies.BaseAssertStrategy;
 import net.lightbody.bmp.core.har.HarEntry;
 import net.lightbody.bmp.core.har.HarRequest;
 import net.lightbody.bmp.core.har.HarResponse;
+import org.testng.Assert;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,12 +25,33 @@ import java.util.stream.Collectors;
  * @param <S> Current class to build fluent API.
  */
 public class Firewatch<T, S extends FirewatchBlueprint> extends FirewatchBlueprint<T, S> {
+    private static final long DEFAULT_TIMEOUT = 10000;
 
     Firewatch(FirewatchBlueprint parent, RelationshipType relationship) {
         super(parent, relationship);
     }
 
+    public void executeWithTimeout() {
+        executeWithTimeout(DEFAULT_TIMEOUT);
+    }
+
+    public void executeWithTimeout(long msTimeout) {
+        long end = System.currentTimeMillis() + msTimeout;
+        while (end > System.currentTimeMillis()) {
+            try {
+                execute();
+                return;
+            } catch (AssertionError ignored) {
+                // Ignored AssertionError
+            }
+        }
+        execute();
+    }
+
     public void execute() {
+        if (context().strategy() != null) {
+            context().strategy().execute(process());
+        }
         new BaseAssertStrategy().execute(process());
     }
 

@@ -22,14 +22,14 @@ public class RequestParameterObserver extends StringParamObserver<HarRequest> {
     @Override
     public boolean observe(HarRequest har) {
         String actual = null;
-        if (har.getPostData() != null) {
+        if (har.getPostData() != null && har.getPostData().getParams() != null) {
             for (HarPostDataParam param : har.getPostData().getParams()) {
                 if (param.getName().equals(name)) {
                     actual = param.getValue();
                     break;
                 }
             }
-        } else {
+        } else if (har.getQueryString() != null) {
             for (HarNameValuePair pair : har.getQueryString()) {
                 if (pair.getName().equals(name)) {
                     actual = pair.getValue();

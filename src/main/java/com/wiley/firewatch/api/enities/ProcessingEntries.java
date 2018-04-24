@@ -2,6 +2,8 @@ package com.wiley.firewatch.api.enities;
 
 import com.wiley.firewatch.api.FirewatchRequest;
 import com.wiley.firewatch.api.FirewatchResponse;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,9 +12,12 @@ import java.util.stream.Stream;
 /**
  * Created by itatsiy on 4/24/2018.
  */
+@Accessors(fluent = true)
 public class ProcessingEntries extends ArrayList<ProcessingEntry> {
-    private final FirewatchRequest firewatchRequest;
-    private final FirewatchResponse firewatchResponse;
+    @Getter
+    private final transient FirewatchRequest firewatchRequest;
+    @Getter
+    private final transient FirewatchResponse firewatchResponse;
 
     public ProcessingEntries(int initialCapacity, FirewatchRequest firewatchRequest, FirewatchResponse firewatchResponse) {
         super(initialCapacity);
@@ -50,7 +55,8 @@ public class ProcessingEntries extends ArrayList<ProcessingEntry> {
     }
 
     public ProcessingEntry bestOverlap() {
-        return stream().max(ProcessingEntry::compareTo).orElse(null);
+        ProcessingEntry best = stream().max(ProcessingEntry::compareTo).orElse(null);
+        return (best != null && best.overlap() > 0) ? best : null;
     }
 
 }

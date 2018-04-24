@@ -25,6 +25,10 @@ public class ProcessingEntry implements Comparable<ProcessingEntry> {
         return (request == null || request.finished()) && (response == null || response.finished());
     }
 
+    public double overlap() {
+        return (request != null ? request.overlap() : 0) + (response != null ? response.overlap() : 0);
+    }
+
     @Override
     public int compareTo(ProcessingEntry o) {
         return ComparisonChain.start()
