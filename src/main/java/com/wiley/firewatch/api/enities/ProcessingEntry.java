@@ -1,0 +1,35 @@
+package com.wiley.firewatch.api.enities;
+
+import com.google.common.collect.ComparisonChain;
+import lombok.Getter;
+import lombok.experimental.Accessors;
+import net.lightbody.bmp.core.har.HarRequest;
+import net.lightbody.bmp.core.har.HarResponse;
+
+/**
+ * Created by itatsiy on 4/24/2018.
+ */
+@Accessors(fluent = true)
+public class ProcessingEntry implements Comparable<ProcessingEntry> {
+    @Getter
+    private ProcessingMetadata<HarRequest> request;
+    @Getter
+    private ProcessingMetadata<HarResponse> response;
+
+    public ProcessingEntry(ProcessingMetadata<HarRequest> request, ProcessingMetadata<HarResponse> response) {
+        this.request = request;
+        this.response = response;
+    }
+
+    public boolean finished() {
+        return (request == null || request.finished()) && (response == null || response.finished());
+    }
+
+    @Override
+    public int compareTo(ProcessingEntry o) {
+        return ComparisonChain.start()
+                .compare(request == null ? 0d : request.overlap(), o.request == null ? 0d : o.request.overlap())
+                .compare(response == null ? 0d : response.overlap(), o.response == null ? 0d : o.response.overlap())
+                .result();
+    }
+}
