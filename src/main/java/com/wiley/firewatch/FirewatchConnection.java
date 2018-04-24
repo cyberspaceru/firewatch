@@ -1,5 +1,6 @@
 package com.wiley.firewatch;
 
+import com.wiley.firewatch.exceptions.FirewatchConnectionUnavailableException;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
@@ -14,8 +15,10 @@ import org.openqa.selenium.net.NetworkUtils;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.UUID;
 
 import static java.util.Optional.ofNullable;
+import static java.util.UUID.randomUUID;
 
 /**
  * Created by itatsiy on 4/18/2018.
@@ -50,6 +53,14 @@ public class FirewatchConnection {
             log.error("Can't create Selenium Proxy.", e);
         }
         return null;
+    }
+
+    public static void newHar() {
+        if (isAvailable()) {
+            proxyServer().newHar(randomUUID().toString());
+        } else {
+            throw new FirewatchConnectionUnavailableException();
+        }
     }
 
     private static boolean connect() {
