@@ -1,5 +1,6 @@
 package com.wiley.firewatch;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 /**
@@ -9,5 +10,6 @@ public class ProxyStartedTest extends FirewatchTest {
     @Test
     public void startDriverWithProxy() {
         getDriver().get("https://www.google.com");
+        Assert.assertNotNull(searchField());
     }
 }
