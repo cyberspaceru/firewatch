@@ -10,12 +10,6 @@ import org.testng.annotations.Test;
  */
 public class BaseTests extends FirewatchTest {
     @Test
-    public void startDriverWithProxy() {
-        getDriver().get("https://www.google.com");
-        Assert.assertNotNull(searchField());
-    }
-
-    @Test
     public void singleRequest() {
         getDriver().get("https://www.google.ru");
         searchField().sendKeys("firewatch");

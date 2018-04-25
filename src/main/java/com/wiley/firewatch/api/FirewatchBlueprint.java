@@ -49,9 +49,12 @@ public abstract class FirewatchBlueprint<T, S extends FirewatchBlueprint> {
         return new FirewatchRequest(null, RelationshipType.AND);
     }
 
-    public S not() {
-        context.inverted(true);
-        return self();
+    protected static FirewatchRequest request(FirewatchBlueprint parent, RelationshipType relationship) {
+        return new FirewatchRequest(parent, relationship);
+    }
+
+    protected static FirewatchResponse response(FirewatchBlueprint parent, RelationshipType relationship) {
+        return new FirewatchResponse(parent, relationship);
     }
 
     public FirewatchRequest andRequest() {
@@ -62,12 +65,14 @@ public abstract class FirewatchBlueprint<T, S extends FirewatchBlueprint> {
         return response(this, RelationshipType.AND);
     }
 
-    protected static FirewatchRequest request(FirewatchBlueprint parent, RelationshipType relationship) {
-        return new FirewatchRequest(parent, relationship);
+    public S strategy(IAssertStrategy strategy) {
+        context.strategy(strategy);
+        return self();
     }
 
-    protected static FirewatchResponse response(FirewatchBlueprint parent, RelationshipType relationship) {
-        return new FirewatchResponse(parent, relationship);
+    public S not() {
+        context.inverted(true);
+        return self();
     }
 
     S observe(IObserver<T> observer) {
@@ -75,16 +80,14 @@ public abstract class FirewatchBlueprint<T, S extends FirewatchBlueprint> {
         return self();
     }
 
+    public S custom(IObserver<T> observer) {
+        return observe(observer);
+    }
+
     @SuppressWarnings("unchecked")
     S self() {
         return (S) this;
     }
-
-    public S strategy(IAssertStrategy strategy) {
-        context.strategy(strategy);
-        return self();
-    }
-
     @Override
     public String toString() {
         return "[" + observers.stream().map(ObserverMetadata::toString).collect(Collectors.joining(" -> ")) + "]";

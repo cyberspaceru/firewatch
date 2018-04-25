@@ -42,7 +42,7 @@ public class Firewatch<T, S extends FirewatchBlueprint> extends FirewatchBluepri
                 execute();
                 return;
             } catch (AssertionError ignored) {
-                // Ignored AssertionError
+                // AssertionError is ignored
             }
         }
         execute();
