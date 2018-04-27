@@ -2,10 +2,9 @@ package com.wiley.firewatch.api;
 
 import com.wiley.firewatch.api.enums.RelationshipType;
 import com.wiley.firewatch.observers.MatchingType;
-import com.wiley.firewatch.observers.request.RequestHeaderObserver;
 import com.wiley.firewatch.observers.responce.ResponseCodeObserver;
 import com.wiley.firewatch.observers.responce.ResponseHeaderObserver;
-import com.wiley.firewatch.utils.contenttype.ContentType;
+import com.wiley.firewatch.utils.ContentType;
 import net.lightbody.bmp.core.har.HarResponse;
 
 /**

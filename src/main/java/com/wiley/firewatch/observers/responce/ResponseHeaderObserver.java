@@ -23,7 +23,7 @@ public class ResponseHeaderObserver extends StringParamObserver<HarResponse> {
     public boolean observe(HarResponse har) {
         String actual = null;
         for (HarNameValuePair pair : har.getHeaders()) {
-            if (pair.getName().equals(name)) {
+            if (pair.getName().equalsIgnoreCase(name)) {
                 actual = pair.getValue();
                 break;
             }
