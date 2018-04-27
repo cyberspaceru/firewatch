@@ -1,12 +1,14 @@
 package com.wiley.firewatch.utils;
 
 import com.wiley.firewatch.observers.MatchingType;
+import lombok.experimental.UtilityClass;
 
 import java.util.regex.Pattern;
 
 /**
  * Created by itatsiy on 4/27/2018.
  */
+@UtilityClass
 public class StringMatcher {
     public static boolean match(String actual, MatchingType type, String expected) {
         if (actual == null && expected == null) {
