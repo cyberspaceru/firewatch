@@ -2,10 +2,7 @@ package com.wiley.firewatch.api;
 
 import com.wiley.firewatch.api.enums.RelationshipType;
 import com.wiley.firewatch.observers.MatchingType;
-import com.wiley.firewatch.observers.request.RequestHeaderObserver;
-import com.wiley.firewatch.observers.request.RequestMethodObserver;
-import com.wiley.firewatch.observers.request.RequestParameterObserver;
-import com.wiley.firewatch.observers.request.RequestUrlObserver;
+import com.wiley.firewatch.observers.request.*;
 import io.netty.handler.codec.http.HttpMethod;
 import net.lightbody.bmp.core.har.HarRequest;
 

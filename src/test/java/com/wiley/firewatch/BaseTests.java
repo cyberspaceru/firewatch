@@ -2,6 +2,7 @@ package com.wiley.firewatch;
 
 import com.wiley.firewatch.api.Firewatch;
 import com.wiley.firewatch.observers.MatchingType;
+import com.wiley.firewatch.utils.contenttype.ContentType;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -16,6 +17,8 @@ public class BaseTests extends FirewatchTest {
         Firewatch.request()
                 .url(MatchingType.REGEXP, "google.(com|ru)/complete/search")
                 .parameterEquals("q", "firewatch")
+                .thenResponse()
+                .contentType(ContentType.json().utf8())
                 .executeWithTimeout();
     }
 }
