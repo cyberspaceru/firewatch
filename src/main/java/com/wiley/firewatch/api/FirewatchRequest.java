@@ -31,7 +31,7 @@ public class FirewatchRequest extends Firewatch<HarRequest, FirewatchRequest> {
     }
 
     public FirewatchRequest header(String name, MatchingType type, String value) {
-        return observe(new RequestHeaderObserver(name, type, value));
+        return observe(new RequestHeaderObserver(MatchingType.EQUALS, name, type, value));
     }
 
     public FirewatchRequest parameterEquals(String name, String value) {
@@ -39,7 +39,7 @@ public class FirewatchRequest extends Firewatch<HarRequest, FirewatchRequest> {
     }
 
     public FirewatchRequest parameter(String name, MatchingType type, String value) {
-        return observe(new RequestParameterObserver(name, type, value));
+        return observe(new RequestParameterObserver(MatchingType.EQUALS, name, type, value));
     }
 
     @Override

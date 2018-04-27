@@ -1,18 +1,14 @@
-package com.wiley.firewatch.observers;
+package com.wiley.firewatch.utils;
+
+import com.wiley.firewatch.observers.MatchingType;
 
 import java.util.regex.Pattern;
 
 /**
- * Created by itatsiy on 4/20/2018.
+ * Created by itatsiy on 4/27/2018.
  */
-public abstract class StringParamObserver<T> implements IObserver<T> {
-    protected final MatchingType type;
-
-    public StringParamObserver(MatchingType type) {
-        this.type = type;
-    }
-
-    protected boolean match(String actual, String expected) {
+public class StringMatcher {
+    public static boolean match(String actual, MatchingType type, String expected) {
         if (actual == null && expected == null) {
             return true;
         } else if (actual == null || expected == null) {

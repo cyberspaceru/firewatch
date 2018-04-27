@@ -7,6 +7,9 @@ import com.wiley.firewatch.observers.responce.ResponseHeaderObserver;
 import com.wiley.firewatch.utils.ContentType;
 import net.lightbody.bmp.core.har.HarResponse;
 
+import static com.wiley.firewatch.observers.MatchingType.EQUALS;
+import static com.wiley.firewatch.observers.MatchingType.EQUALS_IGNORE_CASE;
+
 /**
  * Created by itatsiy on 4/23/2018.
  */
@@ -20,15 +23,15 @@ public class FirewatchResponse extends Firewatch<HarResponse, FirewatchResponse>
     }
 
     public FirewatchResponse headerEquals(String name, String value) {
-        return header(name, MatchingType.EQUALS, value);
+        return header(name, EQUALS, value);
     }
 
     public FirewatchResponse header(String name, MatchingType type, String value) {
-        return observe(new ResponseHeaderObserver(name, type, value));
+        return observe(new ResponseHeaderObserver(EQUALS, name, type, value));
     }
 
     public FirewatchResponse contentType(ContentType contentType) {
-        return header("Content-Type", MatchingType.EQUALS_IGNORE_CASE, contentType.toString());
+        return observe(new ResponseHeaderObserver(EQUALS, "Content-Type", EQUALS_IGNORE_CASE, contentType.toString()));
     }
 
     @Override

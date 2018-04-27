@@ -1,20 +1,25 @@
 package com.wiley.firewatch.observers.request;
 
+import com.wiley.firewatch.observers.IObserver;
 import com.wiley.firewatch.observers.MatchingType;
-import com.wiley.firewatch.observers.StringParamObserver;
+import com.wiley.firewatch.utils.StringMatcher;
 import net.lightbody.bmp.core.har.HarNameValuePair;
 import net.lightbody.bmp.core.har.HarRequest;
+import net.lightbody.bmp.core.har.HarResponse;
 
 /**
  * Created by itatsiy on 4/24/2018.
  */
-public class RequestHeaderObserver extends StringParamObserver<HarRequest> {
+public class RequestHeaderObserver implements IObserver<HarRequest> {
+    private final MatchingType nameMatchingType;
     private final String name;
+    private final MatchingType valueMatchingType;
     private final String value;
 
-    public RequestHeaderObserver(String name, MatchingType type, String value) {
-        super(type);
+    public RequestHeaderObserver(MatchingType nameMatchingType, String name, MatchingType valueMatchingType, String value) {
+        this.nameMatchingType = nameMatchingType;
         this.name = name;
+        this.valueMatchingType = valueMatchingType;
         this.value = value;
     }
 
@@ -22,16 +27,16 @@ public class RequestHeaderObserver extends StringParamObserver<HarRequest> {
     public boolean observe(HarRequest har) {
         String actual = null;
         for (HarNameValuePair pair : har.getHeaders()) {
-            if (pair.getName().equals(name)) {
+            if (StringMatcher.match(pair.getName(), nameMatchingType, name)) {
                 actual = pair.getValue();
                 break;
             }
         }
-        return match(actual, value);
+        return StringMatcher.match(actual, valueMatchingType, value);
     }
 
     @Override
     public String toString() {
-        return "Header(name='" + name + "', matching='" + type + "', value='" + value + "')";
+        return "Header(nMatching='" + nameMatchingType + ", name='" + name + "', vMatching='" + valueMatchingType + "', value='" + value + "')";
     }
 }

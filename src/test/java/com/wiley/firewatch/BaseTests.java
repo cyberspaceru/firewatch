@@ -2,8 +2,7 @@ package com.wiley.firewatch;
 
 import com.wiley.firewatch.api.Firewatch;
 import com.wiley.firewatch.observers.MatchingType;
-import com.wiley.firewatch.utils.contenttype.ContentType;
-import org.testng.Assert;
+import com.wiley.firewatch.utils.ContentType;
 import org.testng.annotations.Test;
 
 /**
