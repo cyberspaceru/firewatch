@@ -19,6 +19,8 @@ public class StringMatcher {
             switch (type) {
                 case REGEXP:
                     return Pattern.compile(expected).matcher(actual).find();
+                case REGEXP_CASE_INSENSITIVE:
+                    return Pattern.compile(expected, Pattern.CASE_INSENSITIVE).matcher(actual).find();
                 case EQUALS:
                     return actual.equals(expected);
                 case EQUALS_IGNORE_CASE:

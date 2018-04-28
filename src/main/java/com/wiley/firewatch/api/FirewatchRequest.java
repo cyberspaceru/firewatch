@@ -4,10 +4,15 @@ import com.wiley.firewatch.api.enums.RelationshipType;
 import com.wiley.firewatch.observers.MatchingType;
 import com.wiley.firewatch.observers.request.*;
 import com.wiley.firewatch.observers.responce.ResponceJsonObserver;
+import com.wiley.firewatch.observers.responce.ResponseHeaderObserver;
+import com.wiley.firewatch.utils.ContentType;
 import io.netty.handler.codec.http.HttpMethod;
 import net.lightbody.bmp.core.har.HarRequest;
 
 import java.util.function.BiPredicate;
+
+import static com.wiley.firewatch.observers.MatchingType.EQUALS_IGNORE_CASE;
+import static com.wiley.firewatch.observers.MatchingType.REGEXP_CASE_INSENSITIVE;
 
 /**
  * Created by itatsiy on 4/23/2018.
@@ -43,6 +48,10 @@ public class FirewatchRequest extends Firewatch<HarRequest, FirewatchRequest> {
 
     public <K> FirewatchRequest json(Class<K> objectClass, K instance, BiPredicate<K, K> predicate) {
         return observe(new RequestJsonObserver<>(objectClass, instance, predicate));
+    }
+
+    public FirewatchRequest contentType(ContentType contentType) {
+        return observe(new RequestHeaderObserver(EQUALS_IGNORE_CASE, "Content-Type", REGEXP_CASE_INSENSITIVE, contentType.toString()));
     }
 
     public FirewatchRequest parameterEquals(String name, String value) {

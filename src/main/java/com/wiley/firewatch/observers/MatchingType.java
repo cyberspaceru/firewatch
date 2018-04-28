@@ -5,6 +5,7 @@ package com.wiley.firewatch.observers;
  */
 public enum MatchingType {
     REGEXP,
+    REGEXP_CASE_INSENSITIVE,
     EQUALS,
     EQUALS_IGNORE_CASE,
     CONTAINS,

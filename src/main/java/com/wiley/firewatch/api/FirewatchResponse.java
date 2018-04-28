@@ -10,8 +10,7 @@ import net.lightbody.bmp.core.har.HarResponse;
 
 import java.util.function.BiPredicate;
 
-import static com.wiley.firewatch.observers.MatchingType.EQUALS;
-import static com.wiley.firewatch.observers.MatchingType.EQUALS_IGNORE_CASE;
+import static com.wiley.firewatch.observers.MatchingType.*;
 
 /**
  * Created by itatsiy on 4/23/2018.
@@ -42,7 +41,7 @@ public class FirewatchResponse extends Firewatch<HarResponse, FirewatchResponse>
     }
 
     public FirewatchResponse contentType(ContentType contentType) {
-        return observe(new ResponseHeaderObserver(EQUALS, "Content-Type", EQUALS_IGNORE_CASE, contentType.toString()));
+        return observe(new ResponseHeaderObserver(EQUALS_IGNORE_CASE, "Content-Type", REGEXP_CASE_INSENSITIVE, contentType.toString()));
     }
 
     @Override

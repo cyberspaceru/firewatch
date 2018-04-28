@@ -16,8 +16,8 @@ public class ContentType {
     @Override
     public String toString() {
         return mimeType
-                + (charset != null ? "; charset=" + charset : "")
-                + (boundary != null ? "; boundary=" + boundary : "");
+                + (charset != null ? ";[\\s]{0,}charset=" + charset : "")
+                + (boundary != null ? ";[\\s]{0,}boundary=" + boundary : "");
     }
 
     public ContentType utf8() {
