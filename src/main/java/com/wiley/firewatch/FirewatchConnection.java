@@ -19,6 +19,7 @@ import java.util.UUID;
 
 import static java.util.Optional.ofNullable;
 import static java.util.UUID.randomUUID;
+import static net.lightbody.bmp.proxy.CaptureType.*;
 
 /**
  * Created by itatsiy on 4/18/2018.
@@ -68,7 +69,7 @@ public class FirewatchConnection {
             log.info("Creating Proxy Connection...");
             BrowserMobProxy proxyServer = new BrowserMobProxyServer();
             proxyServer.setTrustAllServers(true);
-            proxyServer.enableHarCaptureTypes(CaptureType.REQUEST_HEADERS, CaptureType.REQUEST_CONTENT, CaptureType.RESPONSE_HEADERS);
+            proxyServer.enableHarCaptureTypes(REQUEST_HEADERS, REQUEST_CONTENT, REQUEST_BINARY_CONTENT, RESPONSE_HEADERS, RESPONSE_CONTENT, RESPONSE_BINARY_CONTENT);
             proxyServer.start(0);
             log.info("Proxy Connection has CREATED.");
             FirewatchConnection.proxyServer = proxyServer;

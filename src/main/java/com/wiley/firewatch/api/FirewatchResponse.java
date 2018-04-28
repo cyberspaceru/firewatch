@@ -2,10 +2,13 @@ package com.wiley.firewatch.api;
 
 import com.wiley.firewatch.api.enums.RelationshipType;
 import com.wiley.firewatch.observers.MatchingType;
+import com.wiley.firewatch.observers.responce.ResponceJsonObserver;
 import com.wiley.firewatch.observers.responce.ResponseCodeObserver;
 import com.wiley.firewatch.observers.responce.ResponseHeaderObserver;
 import com.wiley.firewatch.utils.ContentType;
 import net.lightbody.bmp.core.har.HarResponse;
+
+import java.util.function.BiPredicate;
 
 import static com.wiley.firewatch.observers.MatchingType.EQUALS;
 import static com.wiley.firewatch.observers.MatchingType.EQUALS_IGNORE_CASE;
@@ -28,6 +31,14 @@ public class FirewatchResponse extends Firewatch<HarResponse, FirewatchResponse>
 
     public FirewatchResponse header(String name, MatchingType type, String value) {
         return observe(new ResponseHeaderObserver(EQUALS, name, type, value));
+    }
+
+    public <K> FirewatchResponse jsonEquals(Class<K> objectClass, K instance) {
+        return observe(new ResponceJsonObserver<>(objectClass, instance, Object::equals));
+    }
+
+    public <K> FirewatchResponse json(Class<K> objectClass, K instance, BiPredicate<K, K> predicate) {
+        return observe(new ResponceJsonObserver<>(objectClass, instance, predicate));
     }
 
     public FirewatchResponse contentType(ContentType contentType) {

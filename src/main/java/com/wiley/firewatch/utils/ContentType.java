@@ -120,8 +120,12 @@ public class ContentType {
         return new ContentType().mimeType("image/jpeg");
     }
 
-    public static ContentType js() {
+    public static ContentType appJs() {
         return new ContentType().mimeType("application/javascript");
+    }
+
+    public static ContentType textJs() {
+        return new ContentType().mimeType("text/javascript");
     }
 
     public static ContentType json() {

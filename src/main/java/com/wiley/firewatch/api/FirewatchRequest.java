@@ -3,8 +3,11 @@ package com.wiley.firewatch.api;
 import com.wiley.firewatch.api.enums.RelationshipType;
 import com.wiley.firewatch.observers.MatchingType;
 import com.wiley.firewatch.observers.request.*;
+import com.wiley.firewatch.observers.responce.ResponceJsonObserver;
 import io.netty.handler.codec.http.HttpMethod;
 import net.lightbody.bmp.core.har.HarRequest;
+
+import java.util.function.BiPredicate;
 
 /**
  * Created by itatsiy on 4/23/2018.
@@ -32,6 +35,14 @@ public class FirewatchRequest extends Firewatch<HarRequest, FirewatchRequest> {
 
     public FirewatchRequest header(String name, MatchingType type, String value) {
         return observe(new RequestHeaderObserver(MatchingType.EQUALS, name, type, value));
+    }
+
+    public <K> FirewatchRequest jsonEquals(Class<K> objectClass, K instance) {
+        return observe(new RequestJsonObserver<>(objectClass, instance, Object::equals));
+    }
+
+    public <K> FirewatchRequest json(Class<K> objectClass, K instance, BiPredicate<K, K> predicate) {
+        return observe(new RequestJsonObserver<>(objectClass, instance, predicate));
     }
 
     public FirewatchRequest parameterEquals(String name, String value) {
