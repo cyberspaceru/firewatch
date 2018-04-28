@@ -32,6 +32,7 @@ DesiredCapabilities capabilities = new DesiredCapabilities();
 if (FirewatchConnection.create()) {  
     capabilities.setCapability(CapabilityType.PROXY, FirewatchConnection.createSeleniumProxy());
     capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);  
+    FirewatchConnection.newHar();
 }
 WebDriver driver = new ChromeDriver(capabilities);
 ```
