@@ -2,10 +2,12 @@ package com.wiley.firewatch.api;
 
 import com.wiley.firewatch.api.enums.RelationshipType;
 import com.wiley.firewatch.observers.MatchingType;
-import com.wiley.firewatch.observers.responce.ResponceJsonObserver;
+import com.wiley.firewatch.observers.responce.ResponseJsonContentObserver;
 import com.wiley.firewatch.observers.responce.ResponseCodeObserver;
 import com.wiley.firewatch.observers.responce.ResponseHeaderObserver;
+import com.wiley.firewatch.observers.responce.ResponseTextContentObserver;
 import com.wiley.firewatch.utils.ContentType;
+import com.wiley.firewatch.utils.StringMatcher;
 import net.lightbody.bmp.core.har.HarResponse;
 
 import java.util.function.BiPredicate;
@@ -32,12 +34,20 @@ public class FirewatchResponse extends Firewatch<HarResponse, FirewatchResponse>
         return observe(new ResponseHeaderObserver(EQUALS, name, type, value));
     }
 
-    public <K> FirewatchResponse jsonEquals(Class<K> objectClass, K instance) {
-        return observe(new ResponceJsonObserver<>(objectClass, instance, Object::equals));
+    public <K> FirewatchResponse jsonContentEquals(Class<K> objectClass, K instance) {
+        return observe(new ResponseJsonContentObserver<>(objectClass, instance, Object::equals));
     }
 
-    public <K> FirewatchResponse json(Class<K> objectClass, K instance, BiPredicate<K, K> predicate) {
-        return observe(new ResponceJsonObserver<>(objectClass, instance, predicate));
+    public <K> FirewatchResponse jsonContent(Class<K> objectClass, K instance, BiPredicate<K, K> predicate) {
+        return observe(new ResponseJsonContentObserver<>(objectClass, instance, predicate));
+    }
+
+    public FirewatchResponse textContent(MatchingType matchingType, String expected) {
+        return observe(new ResponseTextContentObserver(expected, (a, e) -> StringMatcher.match(a, matchingType, e)));
+    }
+
+    public FirewatchResponse textContent(String expected, BiPredicate<String, String> predicate) {
+        return observe(new ResponseTextContentObserver(expected, predicate));
     }
 
     public FirewatchResponse contentType(ContentType contentType) {

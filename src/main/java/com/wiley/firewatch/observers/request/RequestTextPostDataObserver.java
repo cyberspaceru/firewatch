@@ -2,21 +2,21 @@ package com.wiley.firewatch.observers.request;
 
 import com.wiley.firewatch.observers.IObserver;
 import com.wiley.firewatch.observers.common.JsonObserver;
+import com.wiley.firewatch.observers.common.TextObserver;
 import net.lightbody.bmp.core.har.HarRequest;
-import net.lightbody.bmp.core.har.HarResponse;
 
 import java.util.function.BiPredicate;
 
 /**
  * Created by itatsiy on 4/28/2018.
  */
-public class RequestJsonObserver<K> extends JsonObserver<K> implements IObserver<HarRequest> {
-    public RequestJsonObserver(Class<K> objectClass, K instance, BiPredicate<K, K> predicate) {
-        super(objectClass, instance, predicate);
+public class RequestTextPostDataObserver extends TextObserver implements IObserver<HarRequest> {
+    public RequestTextPostDataObserver(String expected, BiPredicate<String, String> predicate) {
+        super(expected, predicate);
     }
 
     @Override
     public boolean observe(HarRequest har) {
-        return observeJson(har.getPostData().getText());
+        return observeText(har.getPostData().getText());
     }
 }

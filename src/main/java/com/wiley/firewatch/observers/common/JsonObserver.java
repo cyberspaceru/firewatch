@@ -4,7 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.lightbody.bmp.core.har.HarContent;
 
+import java.util.Optional;
 import java.util.function.BiPredicate;
+
+import static java.util.Optional.ofNullable;
 
 /**
  * Created by itatsiy on 4/28/2018.
@@ -32,5 +35,10 @@ public abstract class JsonObserver<K> {
             return actual != null && predicate.test(actual, instance);
         }
         return text == null;
+    }
+
+    @Override
+    public String toString() {
+        return "JSON(" + ofNullable(objectClass).map(Class::getSimpleName).orElse("null") + ")";
     }
 }

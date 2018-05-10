@@ -3,7 +3,6 @@ package com.wiley.firewatch;
 import com.wiley.firewatch.api.Firewatch;
 import com.wiley.firewatch.observers.MatchingType;
 import com.wiley.firewatch.utils.ContentType;
-import com.wiley.firewatch.utils.StringMatcher;
 import org.testng.annotations.Test;
 
 /**
@@ -26,7 +25,7 @@ public class BaseTests extends FirewatchTest {
                 .thenResponse()
                 .contentType(ContentType.json().utf8())
                 // JSON object not equals {code: 5, message: "text"}
-                .not().jsonEquals(SimpleObject.class, new SimpleObject())
+                .not().jsonContentEquals(SimpleObject.class, new SimpleObject())
                 .executeWithTimeout();
     }
 }

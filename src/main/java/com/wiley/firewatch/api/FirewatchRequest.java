@@ -3,9 +3,8 @@ package com.wiley.firewatch.api;
 import com.wiley.firewatch.api.enums.RelationshipType;
 import com.wiley.firewatch.observers.MatchingType;
 import com.wiley.firewatch.observers.request.*;
-import com.wiley.firewatch.observers.responce.ResponceJsonObserver;
-import com.wiley.firewatch.observers.responce.ResponseHeaderObserver;
 import com.wiley.firewatch.utils.ContentType;
+import com.wiley.firewatch.utils.StringMatcher;
 import io.netty.handler.codec.http.HttpMethod;
 import net.lightbody.bmp.core.har.HarRequest;
 
@@ -42,12 +41,20 @@ public class FirewatchRequest extends Firewatch<HarRequest, FirewatchRequest> {
         return observe(new RequestHeaderObserver(MatchingType.EQUALS, name, type, value));
     }
 
-    public <K> FirewatchRequest jsonEquals(Class<K> objectClass, K instance) {
-        return observe(new RequestJsonObserver<>(objectClass, instance, Object::equals));
+    public <K> FirewatchRequest jsonPostDataEquals(Class<K> objectClass, K instance) {
+        return observe(new RequestJsonPostDataObserver<>(objectClass, instance, Object::equals));
     }
 
-    public <K> FirewatchRequest json(Class<K> objectClass, K instance, BiPredicate<K, K> predicate) {
-        return observe(new RequestJsonObserver<>(objectClass, instance, predicate));
+    public <K> FirewatchRequest jsonPostData(Class<K> objectClass, K instance, BiPredicate<K, K> predicate) {
+        return observe(new RequestJsonPostDataObserver<>(objectClass, instance, predicate));
+    }
+
+    public FirewatchRequest textPostData(MatchingType matchingType, String expected) {
+        return observe(new RequestTextPostDataObserver(expected, (a, e) -> StringMatcher.match(a, matchingType, e)));
+    }
+
+    public FirewatchRequest textPostData(String expected, BiPredicate<String, String> predicate) {
+        return observe(new RequestTextPostDataObserver(expected, predicate));
     }
 
     public FirewatchRequest contentType(ContentType contentType) {
