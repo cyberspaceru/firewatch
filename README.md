@@ -23,13 +23,4 @@ To use Firewatch in your project, add the `firewatch` dependency to your pom:
     </repository>
 </repositories>
 ```
-In order to start using proxy:
-```java
-DesiredCapabilities capabilities = new DesiredCapabilities();
-if (FirewatchConnection.create()) {  
-    capabilities.setCapability(CapabilityType.PROXY, FirewatchConnection.createSeleniumProxy());
-    capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);  
-    FirewatchConnection.newHar();
-}
-WebDriver driver = new ChromeDriver(capabilities);
-```
+In order to start using proxy read wiki: https://github.com/cyberspaceru/firewatch/wiki
