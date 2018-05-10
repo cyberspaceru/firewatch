@@ -15,7 +15,11 @@ public abstract class TextObserver {
     }
 
     protected boolean observeText(String actual) {
-        return predicate.test(actual, expected);
+        try {
+            return predicate.test(actual, expected);
+        } catch (Exception ignored) {
+            return false;
+        }
     }
 
     @Override

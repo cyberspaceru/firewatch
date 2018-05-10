@@ -17,6 +17,6 @@ public class RequestJsonPostDataObserver<K> extends JsonObserver<K> implements I
 
     @Override
     public boolean observe(HarRequest har) {
-        return observeJson(har.getPostData().getText());
+        return observeJson(har.getPostData() == null ? null : har.getPostData().getText());
     }
 }

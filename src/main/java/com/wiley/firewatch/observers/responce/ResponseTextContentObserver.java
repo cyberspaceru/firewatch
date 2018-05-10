@@ -17,6 +17,6 @@ public class ResponseTextContentObserver extends TextObserver implements IObserv
 
     @Override
     public boolean observe(HarResponse har) {
-        return observeText(har.getContent().getText());
+        return observeText(har.getContent() == null ? null : har.getContent().getText());
     }
 }

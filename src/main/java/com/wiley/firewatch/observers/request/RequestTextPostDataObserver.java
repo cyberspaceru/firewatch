@@ -17,6 +17,6 @@ public class RequestTextPostDataObserver extends TextObserver implements IObserv
 
     @Override
     public boolean observe(HarRequest har) {
-        return observeText(har.getPostData().getText());
+        return observeText(har.getPostData() == null ? null : har.getPostData().getText());
     }
 }

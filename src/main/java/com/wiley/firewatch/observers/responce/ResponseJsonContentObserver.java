@@ -16,6 +16,6 @@ public class ResponseJsonContentObserver<K> extends JsonObserver<K> implements I
 
     @Override
     public boolean observe(HarResponse har) {
-        return observeJson(har.getContent().getText());
+        return observeJson(har.getContent() == null ? null : har.getContent().getText());
     }
 }
