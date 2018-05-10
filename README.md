@@ -1,5 +1,5 @@
 # Firewatch
-Firewatch is automated functional testing tool based on SeleniumDriver and BrowserMobProxyServer. Firewatch allows building assert for requests and responses which was sent and received from your SeleniumDriver.
+Firewatch is automated functional testing tool based on SeleniumDriver and BrowserMobProxyServer. Firewatch allows building assert for requests and responses which was sent and received by your SeleniumDriver.
 
 ### Getting started
 To use Firewatch in your project, add the `firewatch` dependency to your pom:
