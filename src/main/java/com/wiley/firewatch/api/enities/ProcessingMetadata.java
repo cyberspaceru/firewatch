@@ -15,6 +15,9 @@ public class ProcessingMetadata<T> {
     private Map<ObserverMetadata<T>, Boolean> processingTable = new HashMap<>();
 
     public double overlap() {
+        if (processingTable.size() == 0) {
+            return 1;
+        }
         return processingTable().values().stream().filter(x -> x).count() / processingTable.size();
     }
 

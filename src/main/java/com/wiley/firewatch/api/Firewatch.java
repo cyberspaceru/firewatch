@@ -86,9 +86,13 @@ public class Firewatch<T, S extends FirewatchBlueprint> extends FirewatchBluepri
     private static <H> ProcessingMetadata<H> process(FirewatchBlueprint<H, ?> firewatch, H har) {
         ProcessingMetadata<H> processingMetadata = new ProcessingMetadata<>();
         for (ObserverMetadata<H> observerMetadata : firewatch.observers()) {
-            boolean result = observerMetadata.observer().observe(har);
-            result = observerMetadata.invert() != result;
-            processingMetadata.processingTable().put(observerMetadata, result);
+            try {
+                boolean result = observerMetadata.observer().observe(har);
+                result = observerMetadata.invert() != result;
+                processingMetadata.processingTable().put(observerMetadata, result);
+            } catch (Throwable ignore) {
+                // ignored
+            }
         }
         return processingMetadata;
     }
