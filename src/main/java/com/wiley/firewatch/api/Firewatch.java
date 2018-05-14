@@ -12,6 +12,7 @@ import net.lightbody.bmp.core.har.HarRequest;
 import net.lightbody.bmp.core.har.HarResponse;
 import org.testng.Assert;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,18 +26,16 @@ import java.util.stream.Collectors;
  * @param <S> Current class to build fluent API.
  */
 public class Firewatch<T, S extends FirewatchBlueprint> extends FirewatchBlueprint<T, S> {
-    private static final long DEFAULT_TIMEOUT = 10000;
-
     Firewatch(FirewatchBlueprint parent, RelationshipType relationship) {
         super(parent, relationship);
     }
 
     public void executeWithTimeout() {
-        executeWithTimeout(DEFAULT_TIMEOUT);
+        executeWithTimeout(Duration.ofSeconds(10));
     }
 
-    public void executeWithTimeout(long msTimeout, String errorMessage) {
-        long end = System.currentTimeMillis() + msTimeout;
+    public void executeWithTimeout(Duration duration, String errorMessage) {
+        long end = System.currentTimeMillis() + duration.toMillis();
         while (end > System.currentTimeMillis()) {
             try {
                 execute(errorMessage);
@@ -48,8 +47,8 @@ public class Firewatch<T, S extends FirewatchBlueprint> extends FirewatchBluepri
         execute(errorMessage);
     }
 
-    public void executeWithTimeout(long msTimeout) {
-        executeWithTimeout(msTimeout, "Firewatch assert didn't match.");
+    public void executeWithTimeout(Duration duration) {
+        executeWithTimeout(duration, "Firewatch assert didn't match.");
     }
 
     public void execute(String errorMessage) {
