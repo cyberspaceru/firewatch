@@ -48,6 +48,11 @@
             <version>3.11.0</version>
         </dependency>
         <dependency>
+            <groupId>me.alexpanov</groupId>
+            <artifactId>free-port-finder</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
             <groupId>net.lightbody.bmp</groupId>
             <artifactId>browsermob-core</artifactId>
             <version>2.1.5</version>
@@ -81,7 +86,9 @@
                     <noJekyll>true</noJekyll>
                     <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
                     <branch>refs/heads/mvn-repo</branch>
-                    <includes><include>**/*</include></includes>
+                    <includes>
+                        <include>**/*</include>
+                    </includes>
                     <repositoryName>firewatch</repositoryName>
                     <repositoryOwner>cyberspaceru</repositoryOwner>
                 </configuration>
