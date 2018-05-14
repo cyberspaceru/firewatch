@@ -44,7 +44,7 @@ public class Firewatch<T, S extends FirewatchBlueprint> extends FirewatchBluepri
                 // AssertionError is ignored
             }
         }
-        execute(errorMessage);
+        execute(errorMessage + " [timeout='" + duration.toString() + "']" );
     }
 
     public void executeWithTimeout(Duration duration) {
