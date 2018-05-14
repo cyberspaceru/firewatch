@@ -91,7 +91,7 @@ public class Firewatch<T, S extends FirewatchBlueprint> extends FirewatchBluepri
      * Map the Firewatch to the Har.
      */
     private static <H> ProcessingMetadata<H> process(FirewatchBlueprint<H, ?> firewatch, H har) {
-        ProcessingMetadata<H> processingMetadata = new ProcessingMetadata<>();
+        ProcessingMetadata<H> processingMetadata = new ProcessingMetadata<>(har);
         for (ObserverMetadata<H> observerMetadata : firewatch.observers()) {
             try {
                 boolean result = observerMetadata.observer().observe(har);

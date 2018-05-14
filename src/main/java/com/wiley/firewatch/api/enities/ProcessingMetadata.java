@@ -12,7 +12,13 @@ import java.util.Map;
 @Accessors(fluent = true)
 public class ProcessingMetadata<T> {
     @Getter
+    private final T har;
+    @Getter
     private Map<ObserverMetadata<T>, Boolean> processingTable = new HashMap<>();
+
+    public ProcessingMetadata(T har) {
+        this.har = har;
+    }
 
     public double overlap() {
         if (processingTable.size() == 0) {

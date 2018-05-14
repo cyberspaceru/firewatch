@@ -1,11 +1,16 @@
 package com.wiley.firewatch.strategies;
 
 import com.wiley.firewatch.api.enities.ProcessingEntries;
+import com.wiley.firewatch.api.enities.ProcessingMetadata;
+import com.wiley.firewatch.utils.StringMatcher;
 import lombok.extern.slf4j.Slf4j;
+import net.lightbody.bmp.core.har.HarNameValuePair;
+import net.lightbody.bmp.core.har.HarPostDataParam;
 import org.apache.commons.lang3.text.StrBuilder;
 import org.testng.Assert;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -25,8 +30,41 @@ public class BaseAssertStrategy implements IAssertStrategy {
         for (ProcessingEntries entries : processing) {
             if (!entries.finished()) {
                 StrBuilder details = new StrBuilder();
-                Optional.ofNullable(entries.firewatchRequest()).ifPresent(x -> details.append("\n").append(x.toString()));
-                Optional.ofNullable(entries.firewatchResponse()).ifPresent(x -> details.append("\n").append(x.toString()));
+                try {
+                    Optional.ofNullable(entries.firewatchRequest()).ifPresent(x -> details.append("\n").append(x.toString()));
+                    Optional.ofNullable(entries.firewatchResponse()).ifPresent(x -> details.append("\n").append(x.toString()));
+                    Optional.ofNullable(entries.bestOverlap()).ifPresent(e -> {
+                        Optional.ofNullable(e.request()).map(ProcessingMetadata::har).filter(Objects::nonNull).ifPresent(x -> {
+                            details.append("\n[Request]\n").append("Overlap: ").append(e.request().overlap()).append("\n");
+                            details.append("URL: ").append(x.getUrl()).append("\n");
+                            details.append("Method: ").append(x.getMethod()).append("\n");
+                            details.append("Params: ");
+                            if (x.getPostData() != null && x.getPostData().getParams() != null) {
+                                for (HarPostDataParam param : x.getPostData().getParams()) {
+                                    details.append("\n\t").append(param.getName()).append(": ").append(param.getValue());
+                                }
+                            } else if (x.getQueryString() != null) {
+                                for (HarNameValuePair pair : x.getQueryString()) {
+                                    details.append("\n\t").append(pair.getName()).append(": ").append(pair.getValue());
+                                }
+                            }
+                            details.append("\nHeaders: ");
+                            for (HarNameValuePair pair : x.getHeaders()) {
+                                details.append("\n\t").append(pair.getName()).append(": ").append(pair.getValue());
+                            }
+                        });
+                        Optional.ofNullable(e.response()).map(ProcessingMetadata::har).filter(Objects::nonNull).ifPresent(x -> {
+                            details.append("\n[Response]\n").append("Overlap: ").append(e.response().overlap()).append("\n");
+                            details.append("Status: ").append(x.getStatus()).append("\n");
+                            details.append("Headers: ");
+                            for (HarNameValuePair pair : x.getHeaders()) {
+                                details.append("\n\t").append(pair.getName()).append(": ").append(pair.getValue());
+                            }
+                        });
+                    });
+                } catch (Exception ignore) {
+                    details.append("\nERROR DURING PREPARATION DETAILS.");
+                }
                 Assert.fail(errorMessage + details.toString());
             }
         }
