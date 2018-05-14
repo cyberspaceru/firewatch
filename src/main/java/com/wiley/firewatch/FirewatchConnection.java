@@ -58,7 +58,13 @@ public class FirewatchConnection {
 
     public static void newHar() {
         if (isAvailable()) {
-            proxyServer().newHar(randomUUID().toString());
+            if (proxyServer().getHar() != null) {
+                log.info("End har.");
+                proxyServer().endHar();
+            }
+            String initialPageRefName = randomUUID().toString();
+            log.info("New har '{}'.", initialPageRefName);
+            proxyServer().newHar(initialPageRefName);
         } else {
             throw new FirewatchConnectionUnavailableException();
         }

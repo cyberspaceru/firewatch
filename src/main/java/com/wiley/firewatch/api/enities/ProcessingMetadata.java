@@ -24,7 +24,7 @@ public class ProcessingMetadata<T> {
         if (processingTable.size() == 0) {
             return 1;
         }
-        return processingTable().values().stream().filter(x -> x).count() / processingTable.size();
+        return (double) processingTable().values().stream().filter(x -> x).count() / processingTable.size();
     }
 
     public boolean finished() {

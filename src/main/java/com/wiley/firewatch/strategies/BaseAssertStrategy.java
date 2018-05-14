@@ -1,5 +1,6 @@
 package com.wiley.firewatch.strategies;
 
+import com.wiley.firewatch.FirewatchConnection;
 import com.wiley.firewatch.api.enities.ProcessingEntries;
 import com.wiley.firewatch.api.enities.ProcessingMetadata;
 import com.wiley.firewatch.utils.StringMatcher;
@@ -31,37 +32,47 @@ public class BaseAssertStrategy implements IAssertStrategy {
             if (!entries.finished()) {
                 StrBuilder details = new StrBuilder();
                 try {
-                    Optional.ofNullable(entries.firewatchRequest()).ifPresent(x -> details.append("\n").append(x.toString()));
-                    Optional.ofNullable(entries.firewatchResponse()).ifPresent(x -> details.append("\n").append(x.toString()));
-                    Optional.ofNullable(entries.bestOverlap()).ifPresent(e -> {
-                        Optional.ofNullable(e.request()).map(ProcessingMetadata::har).filter(Objects::nonNull).ifPresent(x -> {
-                            details.append("\n[Request]\n").append("Overlap: ").append(e.request().overlap()).append("\n");
-                            details.append("URL: ").append(x.getUrl()).append("\n");
-                            details.append("Method: ").append(x.getMethod()).append("\n");
-                            details.append("Params: ");
-                            if (x.getPostData() != null && x.getPostData().getParams() != null) {
-                                for (HarPostDataParam param : x.getPostData().getParams()) {
-                                    details.append("\n\t").append(param.getName()).append(": ").append(param.getValue());
+                    if (FirewatchConnection.proxyServer().getHar() != null) {
+                        details.append("\n[DETAILS]");
+                        details.append("\nHar entries: ").append(FirewatchConnection.proxyServer().getHar().getLog().getEntries().size());
+                        details.append("\nHar entries hash code: ").append(FirewatchConnection.proxyServer().getHar().getLog().getEntries().hashCode());
+                        Optional.ofNullable(entries.firewatchRequest()).ifPresent(x -> details.append("\n").append(x.toString()));
+                        Optional.ofNullable(entries.firewatchResponse()).ifPresent(x -> details.append("\n").append(x.toString()));
+                        Optional.ofNullable(entries.bestOverlap()).ifPresent(e -> {
+                            Optional.ofNullable(e.request()).map(ProcessingMetadata::har).filter(Objects::nonNull).ifPresent(x -> {
+                                details.append("\n[Request]\n").append("Overlap: ").append(e.request().overlap()).append("\n");
+                                details.append("URL: ").append(x.getUrl()).append("\n");
+                                details.append("Method: ").append(x.getMethod()).append("\n");
+                                details.append("Params: ");
+                                if (x.getPostData() != null && x.getPostData().getParams() != null) {
+                                    for (HarPostDataParam param : x.getPostData().getParams()) {
+                                        details.append("\n\t").append(param.getName()).append(": ").append(param.getValue());
+                                    }
+                                } else if (x.getQueryString() != null) {
+                                    for (HarNameValuePair pair : x.getQueryString()) {
+                                        details.append("\n\t").append(pair.getName()).append(": ").append(pair.getValue());
+                                    }
                                 }
-                            } else if (x.getQueryString() != null) {
-                                for (HarNameValuePair pair : x.getQueryString()) {
+                                details.append("\nHeaders: ");
+                                for (HarNameValuePair pair : x.getHeaders()) {
                                     details.append("\n\t").append(pair.getName()).append(": ").append(pair.getValue());
                                 }
-                            }
-                            details.append("\nHeaders: ");
-                            for (HarNameValuePair pair : x.getHeaders()) {
-                                details.append("\n\t").append(pair.getName()).append(": ").append(pair.getValue());
-                            }
+                                Optional.ofNullable(x.getPostData()).ifPresent(harPostData ->
+                                        details.append("\nPost Data: \n").append(x.getPostData().getText()).append("\n")
+                                );
+                            });
+                            Optional.ofNullable(e.response()).map(ProcessingMetadata::har).filter(Objects::nonNull).ifPresent(x -> {
+                                details.append("\n[Response]\n").append("Overlap: ").append(e.response().overlap()).append("\n");
+                                details.append("Status: ").append(x.getStatus()).append("\n");
+                                details.append("Headers: ");
+                                for (HarNameValuePair pair : x.getHeaders()) {
+                                    details.append("\n\t").append(pair.getName()).append(": ").append(pair.getValue());
+                                }
+                            });
                         });
-                        Optional.ofNullable(e.response()).map(ProcessingMetadata::har).filter(Objects::nonNull).ifPresent(x -> {
-                            details.append("\n[Response]\n").append("Overlap: ").append(e.response().overlap()).append("\n");
-                            details.append("Status: ").append(x.getStatus()).append("\n");
-                            details.append("Headers: ");
-                            for (HarNameValuePair pair : x.getHeaders()) {
-                                details.append("\n\t").append(pair.getName()).append(": ").append(pair.getValue());
-                            }
-                        });
-                    });
+                    } else {
+                        details.append("Har is empty.");
+                    }
                 } catch (Exception ignore) {
                     details.append("\nERROR DURING PREPARATION DETAILS.");
                 }
