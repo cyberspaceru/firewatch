@@ -35,24 +35,32 @@ public class Firewatch<T, S extends FirewatchBlueprint> extends FirewatchBluepri
         executeWithTimeout(DEFAULT_TIMEOUT);
     }
 
-    public void executeWithTimeout(long msTimeout) {
+    public void executeWithTimeout(long msTimeout, String errorMessage) {
         long end = System.currentTimeMillis() + msTimeout;
         while (end > System.currentTimeMillis()) {
             try {
-                execute();
+                execute(errorMessage);
                 return;
             } catch (AssertionError ignored) {
                 // AssertionError is ignored
             }
         }
-        execute();
+        execute(errorMessage);
     }
 
-    public void execute() {
+    public void executeWithTimeout(long msTimeout) {
+        executeWithTimeout(msTimeout, "Firewatch assert didn't match.");
+    }
+
+    public void execute(String errorMessage) {
         if (context().strategy() != null) {
             context().strategy().execute(process());
         }
-        new BaseAssertStrategy().execute(process());
+        new BaseAssertStrategy(errorMessage).execute(process());
+    }
+
+    public void execute() {
+        execute("Firewatch assert didn't match.");
     }
 
     private List<ProcessingEntries> process() {
