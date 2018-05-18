@@ -8,14 +8,15 @@ import lombok.extern.slf4j.Slf4j;
 import net.lightbody.bmp.BrowserMobProxy;
 import net.lightbody.bmp.BrowserMobProxyServer;
 import net.lightbody.bmp.client.ClientUtil;
-import net.lightbody.bmp.proxy.CaptureType;
 import org.apache.commons.lang3.text.StrBuilder;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.net.NetworkUtils;
 
+import java.io.IOException;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.UnknownHostException;
-import java.util.UUID;
 
 import static java.util.Optional.ofNullable;
 import static java.util.UUID.randomUUID;
@@ -28,6 +29,8 @@ import static net.lightbody.bmp.proxy.CaptureType.*;
 @UtilityClass
 @Accessors(fluent = true)
 public class FirewatchConnection {
+    public static final int MAX_PORT_NUMBER = 49151;
+    public static final int MIN_PORT_NUMBER = 1;
     @Getter
     private static BrowserMobProxy proxyServer;
 
@@ -76,7 +79,7 @@ public class FirewatchConnection {
             BrowserMobProxy proxyServer = new BrowserMobProxyServer();
             proxyServer.setTrustAllServers(true);
             proxyServer.enableHarCaptureTypes(REQUEST_HEADERS, REQUEST_CONTENT, REQUEST_BINARY_CONTENT, RESPONSE_HEADERS, RESPONSE_CONTENT, RESPONSE_BINARY_CONTENT);
-            proxyServer.start(0);
+            proxyServer.start();
             log.info("Proxy Connection has CREATED.");
             FirewatchConnection.proxyServer = proxyServer;
             printAboutProxy();

@@ -34,8 +34,8 @@ public class BaseAssertStrategy implements IAssertStrategy {
                 try {
                     if (FirewatchConnection.proxyServer().getHar() != null) {
                         details.append("\n[DETAILS]");
-                        details.append("\nHar entries: ").append(FirewatchConnection.proxyServer().getHar().getLog().getEntries().size());
-                        details.append("\nHar entries hash code: ").append(FirewatchConnection.proxyServer().getHar().getLog().getEntries().hashCode());
+                        details.append("\nHar allBestEntries: ").append(FirewatchConnection.proxyServer().getHar().getLog().getEntries().size());
+                        details.append("\nHar allBestEntries hash code: ").append(FirewatchConnection.proxyServer().getHar().getLog().getEntries().hashCode());
                         Optional.ofNullable(entries.firewatchRequest()).ifPresent(x -> details.append("\n").append(x.toString()));
                         Optional.ofNullable(entries.firewatchResponse()).ifPresent(x -> details.append("\n").append(x.toString()));
                         Optional.ofNullable(entries.bestOverlap()).ifPresent(e -> {

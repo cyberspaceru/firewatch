@@ -41,8 +41,14 @@ public class ProcessingEntries extends ArrayList<ProcessingEntry> {
         return best != null && (best.request() == null || best.request().finished()) && (best.response() == null || best.response().finished());
     }
 
-    public ProcessingEntry best() {
-        return bests() == null ? null : bests().findFirst().orElse(null);
+    public ProcessingEntry bestOverlap() {
+        ProcessingEntry best = stream().max(ProcessingEntry::compareTo).orElse(null);
+        return (best != null && best.overlap() > 0) ? best : null;
+    }
+
+    private ProcessingEntry best() {
+        Stream<ProcessingEntry> bests = bests();
+        return bests == null ? null : bests.findFirst().orElse(null);
     }
 
     public Stream<ProcessingEntry> bests() {
@@ -52,11 +58,6 @@ public class ProcessingEntries extends ArrayList<ProcessingEntry> {
         }
         return stream().filter(x -> (x.request() == best.request() || x.request().overlap() == best.request().overlap())
                 && (x.response() == best.response() || x.response().overlap() == best.response().overlap()));
-    }
-
-    public ProcessingEntry bestOverlap() {
-        ProcessingEntry best = stream().max(ProcessingEntry::compareTo).orElse(null);
-        return (best != null && best.overlap() > 0) ? best : null;
     }
 
 }

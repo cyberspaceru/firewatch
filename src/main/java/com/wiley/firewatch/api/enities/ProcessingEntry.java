@@ -3,6 +3,7 @@ package com.wiley.firewatch.api.enities;
 import com.google.common.collect.ComparisonChain;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import net.lightbody.bmp.core.har.HarEntry;
 import net.lightbody.bmp.core.har.HarRequest;
 import net.lightbody.bmp.core.har.HarResponse;
 
@@ -12,11 +13,14 @@ import net.lightbody.bmp.core.har.HarResponse;
 @Accessors(fluent = true)
 public class ProcessingEntry implements Comparable<ProcessingEntry> {
     @Getter
-    private ProcessingMetadata<HarRequest> request;
+    private final HarEntry harEntry;
     @Getter
-    private ProcessingMetadata<HarResponse> response;
+    private final ProcessingMetadata<HarRequest> request;
+    @Getter
+    private final ProcessingMetadata<HarResponse> response;
 
-    public ProcessingEntry(ProcessingMetadata<HarRequest> request, ProcessingMetadata<HarResponse> response) {
+    public ProcessingEntry(HarEntry harEntry, ProcessingMetadata<HarRequest> request, ProcessingMetadata<HarResponse> response) {
+        this.harEntry = harEntry;
         this.request = request;
         this.response = response;
     }

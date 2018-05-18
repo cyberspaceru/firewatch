@@ -30,36 +30,38 @@ public class Firewatch<T, S extends FirewatchBlueprint> extends FirewatchBluepri
         super(parent, relationship);
     }
 
-    public void executeWithTimeout() {
-        executeWithTimeout(Duration.ofSeconds(10));
+    public FirewatchPostProcessing executeWithTimeout() {
+        return executeWithTimeout(Duration.ofSeconds(10));
     }
 
-    public void executeWithTimeout(Duration duration, String errorMessage) {
+    public FirewatchPostProcessing executeWithTimeout(Duration duration, String errorMessage) {
         long end = System.currentTimeMillis() + duration.toMillis();
         while (end > System.currentTimeMillis()) {
             try {
-                execute(errorMessage);
-                return;
+                return execute(errorMessage);
             } catch (AssertionError ignored) {
                 // AssertionError is ignored
             }
         }
-        execute(errorMessage + " [timeout='" + duration.toString() + "']" );
+        return execute(errorMessage + " [timeout='" + duration.toString() + "']");
     }
 
-    public void executeWithTimeout(Duration duration) {
-        executeWithTimeout(duration, "Firewatch assert didn't match.");
+    public FirewatchPostProcessing executeWithTimeout(Duration duration) {
+        return executeWithTimeout(duration, "Firewatch assert didn't match.");
     }
 
-    public void execute(String errorMessage) {
+    public FirewatchPostProcessing execute() {
+        return execute("Firewatch assert didn't match.");
+    }
+
+    public FirewatchPostProcessing execute(String errorMessage) {
+        List<ProcessingEntries> result = process();
         if (context().strategy() != null) {
-            context().strategy().execute(process());
+            context().strategy().execute(result);
+        } else {
+            new BaseAssertStrategy(errorMessage).execute(result);
         }
-        new BaseAssertStrategy(errorMessage).execute(process());
-    }
-
-    public void execute() {
-        execute("Firewatch assert didn't match.");
+        return new FirewatchPostProcessing(result);
     }
 
     private List<ProcessingEntries> process() {
@@ -84,7 +86,7 @@ public class Firewatch<T, S extends FirewatchBlueprint> extends FirewatchBluepri
     private static ProcessingEntry process(Entry<FirewatchRequest, FirewatchResponse> fPair, HarEntry har) {
         ProcessingMetadata<HarRequest> request = fPair.getKey() == null ? null : process(fPair.getKey(), har.getRequest());
         ProcessingMetadata<HarResponse> response = fPair.getValue() == null ? null : process(fPair.getValue(), har.getResponse());
-        return new ProcessingEntry(request, response);
+        return new ProcessingEntry(har, request, response);
     }
 
     /**
