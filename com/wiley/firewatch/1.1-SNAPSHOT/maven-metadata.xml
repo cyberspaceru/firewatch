@@ -2,23 +2,23 @@
 <metadata modelVersion="1.1.0">
   <groupId>com.wiley</groupId>
   <artifactId>firewatch</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.1-SNAPSHOT</version>
   <versioning>
     <snapshot>
-      <timestamp>20180518.122858</timestamp>
+      <timestamp>20181016.151641</timestamp>
       <buildNumber>1</buildNumber>
     </snapshot>
-    <lastUpdated>20180518122858</lastUpdated>
+    <lastUpdated>20181016151641</lastUpdated>
     <snapshotVersions>
       <snapshotVersion>
         <extension>jar</extension>
-        <value>1.0-20180518.122858-1</value>
-        <updated>20180518122858</updated>
+        <value>1.1-20181016.151641-1</value>
+        <updated>20181016151641</updated>
       </snapshotVersion>
       <snapshotVersion>
         <extension>pom</extension>
-        <value>1.0-20180518.122858-1</value>
-        <updated>20180518122858</updated>
+        <value>1.1-20181016.151641-1</value>
+        <updated>20181016151641</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>
